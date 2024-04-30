@@ -1,0 +1,54 @@
+@import url(https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900);
+
+:root {
+  --vt-c-white: #d3d3d3;
+
+  --vt-c-black: #1e1e1e;
+  --text-color: #272727;
+
+  --font-family: Inter, sans-serif;
+}
+
+/* semantic color variables for this project */
+:root {
+  --color-background: var(--vt-c-white);
+  --color-text: var(--text-color);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  width: min(100%, 1300px);
+  margin: 0 auto 0;
+  color: var(--color-text);
+  background: var(--color-background);
+  font-family: var(--font-family);
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* scroll-padding-top: 2em; */
+}
+
+button,
+input {
+  outline: none;
+  font-family: var(--font-family);
+  border: none;
+}
+
+button {
+  cursor: pointer;
+}
