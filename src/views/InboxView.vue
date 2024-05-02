@@ -61,22 +61,37 @@ export default {
   
     }
 
-    const shareLink = () => {
 
-      if(navigator.canShare) {
-        navigator.share( {
-          title: 'Send me an anonymous message',
-          text: `Send an anonymous message to ${usernameRef.value}`,
-          url: userURL.value
-        })
-      }else {
-        alert('Your navigator does not support web share API, Coping the link to your cliboard...');
-        navigator.clipboard.writeText(
-          `Iam on Anony as ${usernameRef.value} send me an anonymous message here using this link: ${userURL.value}`
-          )
-        
-      }
-    }
+    const shareLink = () => {
+  const username = usernameRef.value;
+  const url = userURL.value;
+
+  const message = `I'm on Anony as ${username}. Send me an anonymous message here: ${url}`;
+
+  if (navigator.canShare) {
+    navigator.share({
+      title: 'Send me an anonymous message',
+      text: `Send an anonymous message to ${username}`,
+      url: url
+    }).catch(() => {
+      fallbackCopyToClipboard(message);
+    });
+  } else {
+    fallbackCopyToClipboard(message);
+  }
+};
+
+
+const fallbackCopyToClipboard = (text) => {
+  alert("Your browser doesn't support sharing. Link copied to clipboard.");
+  navigator.clipboard.writeText(text).then(() => {
+    console.log('Link copied to clipboard:', text);
+  }).catch((err) => {
+    console.error('Failed to copy link to clipboard: ', err);
+  });
+};
+
+
     onMounted(async () => {
      await handleUserData();
     
