@@ -15,7 +15,7 @@
         Anony account without using any third-party providers such as Google or Facebook. Just sign
         in anonymously.
       </p>
-      <RouterLink to="session">Sign in anonymously</RouterLink>
+      <RouterLink to="session" v-if="!user">Sign in anonymously</RouterLink>
     </section>
 
     <section id="safety">
@@ -30,7 +30,10 @@
 </template>
 
 <script>
-export default {}
+export default {
+
+  props: ['user']
+}
 </script>
 
 <style scoped>

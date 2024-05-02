@@ -1,8 +1,9 @@
 <template>
-  <form>
+  <form @submit.prevent="handleSignIn">
     <h1>Create your Anony account</h1>
     <label for="username">
       <h4>Choose your Anony username</h4>
+      <h5>{{ feedback }}</h5>
       <input
         type="text"
         required
@@ -27,19 +28,31 @@ export default {
     setup(){
 
       const username = ref('');
+      const feedback = ref('');
 
-      const handleSignIn = () => {
+      const handleSignIn = async () => {
 
         if (!username.value) {
           return feedback.value = 'Please choose your Anony username'
         }
+        if(username.value.length > 10) {
+          return feedback.value = 'Anony username cannot be more than 10 chars long'
+        }
 
+        if (username.value.length < 5) {
+          return feedback.value = 'Anony username cannot be less than 5 chars long'
+        }
+        feedback.value = 'Creating user...'
+         await signIn(username);
 
       }
 
 
+
+
       return {
         username,
+        feedback,
         handleSignIn 
 
       }

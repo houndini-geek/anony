@@ -5,15 +5,29 @@
       <RouterLink to="#about">What's Anony</RouterLink>
       <RouterLink to="#howitswork">How its work</RouterLink>
       <RouterLink to="#safety">Safety</RouterLink>
-      <RouterLink to="suport">Support</RouterLink>
+      <RouterLink to="support">Support</RouterLink>
     </nav>
-    <RouterLink to="session">sign in</RouterLink>
+    <div v-if="!user" class="userBtn">
+      <RouterLink to="session">sign in</RouterLink>
+    </div>
+
+    <div v-else class="userBtn">
+  <RouterLink to="inbox">inbox</RouterLink>
+</div>
+    
   </header>
 </template>
 
 <script>
 export default {
-  name: 'HeaderComponent'
+  name: 'HeaderComponent',
+  props: ['user'],
+  setup() {
+
+    return {
+
+    }
+  }
 }
 </script>
 
@@ -46,7 +60,7 @@ nav a {
   margin: 0 1em;
 }
 
-header > a {
+header .userBtn a {
   font-weight: 800;
   text-transform: capitalize;
   text-decoration: none;
