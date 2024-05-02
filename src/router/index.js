@@ -3,6 +3,8 @@ import HomeView from '../views/HomeView.vue'
 import SessionView from '../views/SessionView.vue'
 import InboxView from '../views/InboxView.vue'
 import SendMessageView from '../views/SendMessageView.vue'
+
+import RoomView from '../views/RoomView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,6 +28,12 @@ const router = createRouter({
       path: '/send/:id',
       name: 'SendMessage',
       component: SendMessageView,
+      props: true
+    },
+    {
+      path: '/room',
+      name: 'Room',
+      component: RoomView,
       props: true
     }
   ]
