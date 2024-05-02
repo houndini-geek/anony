@@ -6,9 +6,12 @@
 
  <div class="container">
     <div class="container-header">
-        <h2>
-            Send an anonyme message to {{ usernameRef }}
+        <h2 v-if="usernameRef">
+            Send an anonymous message to {{ usernameRef || '......'}}
         </h2>
+        <h4 v-else>
+            User not found.
+        </h4>
         <span> {{ feedback }}</span>
     </div>
     <form @submit.prevent="submitMssg">
@@ -45,14 +48,29 @@ export default {
     handleAnonyMssg();
 
     const submitMssg = async () => {
-        if(!messageRef.value) {
-            return feedback.value = 'Message cannot be empty'
-        }
-        feedback.value = 'Sending...'
-       const mssg =  await sendAnonyMssg(userId, messageRef);
-       feedback.value = mssg.success
-       messageRef.value = ''
+  if (!messageRef.value) {
+    feedback.value = 'Message cannot be empty';
+    return;
+  }
+  
+  feedback.value = 'Sending...';
+  
+  try {
+    const mssg = await sendAnonyMssg(userId, messageRef); // Call sendAnonyMssg function
+    console.log(mssg);
+    feedback.value = mssg.success; // Display success message
+  } catch (error) {
+    console.error(error); // Log the error to console
+    if (error.error) {
+      feedback.value = error.error; // Display the error message
+    } else {
+      feedback.value = 'An error occurred while sending the message';
     }
+  }
+  
+  messageRef.value = '';
+};
+
 
         return {
             usernameRef,

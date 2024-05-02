@@ -193,7 +193,7 @@ const firebaseConfig = {
             console.log(error.message)
           })
         }else {
-          reject({ error: 'Cannot find user doc'});
+          reject({ error: 'An error occurred while sending the message'});
         }
       })
     })
