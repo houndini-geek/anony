@@ -166,10 +166,36 @@ header button svg {
 
   background-color: transparent;
   color: var(--text-color);
+  width: min(80%,30rem);
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
+
+
+
+
+@media (max-width: 900px) {
+
+  .banner {
+    margin: 18% auto 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .banner h2 {
+    font-size: 10vw;
+    width: 100%;
+    padding: 0;
+  }
+}
+
+
+
+
+
+
+
 
 nav {
 
