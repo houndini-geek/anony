@@ -223,7 +223,7 @@ nav a.router-link-exact-active {
 .messages {
 
   width: 100%;
-  margin: 10% auto 0;
+  margin: 15% auto 0;
   text-align: center;
   display: grid;
   grid-gap: 0.7em;

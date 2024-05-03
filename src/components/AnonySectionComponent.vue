@@ -66,7 +66,8 @@ section a {
   font-weight: 500;
   text-transform: capitalize;
   text-decoration: none;
-  background-color: var(--vt-c-black);
+  background: rgb(255,95,165);
+  background: linear-gradient(90deg, rgba(255,95,165,1) 0%, rgba(206,107,187,1) 0%, rgba(177,114,200,1) 0%, rgba(177,114,200,1) 0%, rgba(221,103,180,1) 40%, rgba(137,124,218,1) 100%, rgba(231,101,176,1) 100%, rgba(51,145,255,1) 100%);
   color: var(--vt-c-white);
   display: inline-block;
   padding: 0.7em 1.7em;

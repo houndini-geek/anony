@@ -112,18 +112,18 @@ const firebaseConfig = {
               const userData = snapshot.data();
               resolve(userData);
             }else {
-              console.log('User does not exist');
-              alert('User does not exist');
-              reject('User does not exist');
-              //Redirect to homepage 
-              location.href = '/'
+              console.log('Doc not found.');
+              alert('Error occured while triying to retrive your data, Create a new Anony acccount');
+              reject('Doc not found');
+              //Redirect to session page 
+              location.href = '/session'
               return
             }
           }else {
             console.log('User does not exist');
             alert('User does not exist');
             reject('User does not exist');
-            location.href = '/'
+            location.href = '/session'
             return
           }
         })
@@ -208,8 +208,11 @@ const firebaseConfig = {
       onAuthStateChanged(auth, (user) => {
 
         if (user) {
+          console.log(user)
           isUser.value = true 
           resolve(isUser)
+        }else{
+          console.log('No user found')
         }
       })
     })

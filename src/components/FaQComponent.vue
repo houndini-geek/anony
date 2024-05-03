@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section id="faq">
     <h3>FAQ 🤓</h3>
     <div>
       <h4>Is Anony free to use?</h4>
@@ -36,15 +36,17 @@ export default {}
 <style scoped>
 section {
   width: 100%;
+  margin:10% auto 3%;
   text-align: center;
-  background-color: #c8c8c8;
+  background: rgb(133,183,189);
+  background: linear-gradient(90deg, rgba(133,183,189,1) 0%, rgba(244,130,231,1) 100%);
   border-radius: 0.7em;
   padding: 2em;
 }
 
 section h3 {
-  font-weight: 700;
-  font-size: 2em;
+  font-weight: 900;
+  font-size: 2.4em;
   text-transform: capitalize;
   padding: 1em;
 }
@@ -58,11 +60,14 @@ section div {
 
 section div h4 {
   font-weight: 800;
+  font-size: 1.7em;
+  text-transform: capitalize;
   padding: 0.6em 0;
 }
 
 section div p {
   font-weight: 500;
+  font-size: 1.2em;
   text-align-last: left;
   word-wrap: wrap;
 }

@@ -28,7 +28,9 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #cdcdcd;
+  /* background-color: #cdcdcd; */
+  background: rgb(238,174,202);
+background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
   border-radius: 0.7em;
 }
 
