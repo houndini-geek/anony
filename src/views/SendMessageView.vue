@@ -35,7 +35,7 @@
 
 <script>
 import { useRoute } from 'vue-router'
-import { sendAnonyMssg, getReceiverName } from '../composables/userParams.js'
+import { sendAnonyMssg, getReceiverName } from '../composables/userParams.min.js'
 import { ref } from 'vue'
 
 export default {

@@ -20,7 +20,7 @@
 
 <script>
 import { ref } from 'vue'
-import { signIn } from '../composables/userParams.js'
+import { signIn } from '../composables/userParams.min.js'
 
 export default {
   setup() {
@@ -93,7 +93,7 @@ form button {
   text-transform: capitalize;
   font-weight: 700;
   font-size: 1.1em;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.1em;
   color: var(--vt-c-white);
   background-color: var(--vt-c-black);
   border-radius: 0.5em;

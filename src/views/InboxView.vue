@@ -47,7 +47,7 @@
 
 <script>
 import { onMounted, ref } from 'vue'
-import { getUserData } from '../composables/userParams.js'
+import { getUserData } from '../composables/userParams.min.js'
 
 export default {
   setup() {

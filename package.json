@@ -7,10 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "minify": "terser src/composables/userParams.js -c -m --output src/composables/userParams.min.js",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "terser": "^5.31.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },

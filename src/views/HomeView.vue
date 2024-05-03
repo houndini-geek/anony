@@ -11,7 +11,7 @@ import AnonySectionComponentVue from '../components/AnonySectionComponent.vue'
 import BannerComponentVue from '../components/BannerComponent.vue'
 import HeaderComponentVue from '../components/HeaderComponent.vue'
 
-import { checkUser } from '../composables/userParams.js'
+import { checkUser } from '../composables/userParams.min.js'
 import { ref } from 'vue'
 
 export default {
