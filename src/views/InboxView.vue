@@ -24,7 +24,6 @@
 
     <div class="message" v-for="message in messagesRef" :key="message.id">
       <div class="message-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M136,128a8,8,0,1,1-8-8A8,8,0,0,1,136,128Zm-52-8a8,8,0,1,0,8,8A8,8,0,0,0,84,120Zm88,0a8,8,0,1,0,8,8A8,8,0,0,0,172,120Zm56,8A100,100,0,0,1,79.5,215.47l-35.69,11.9a12,12,0,0,1-15.18-15.18l11.9-35.69A100,100,0,1,1,228,128Zm-8,0A92,92,0,1,0,48.35,174.07a4,4,0,0,1,.33,3.27L36.22,214.72a4,4,0,0,0,5.06,5.06l37.38-12.46a3.93,3.93,0,0,1,1.27-.21,4.05,4.05,0,0,1,2,.54A92,92,0,0,0,220,128Z"></path></svg>
       </div>
       <div class="message-content">
         <h5>{{ message.date }}</h5>
@@ -151,6 +150,10 @@ header button svg {
   margin: 10% auto 0 ;
   width: 100%;
   text-align: center;
+  background: rgb(238,174,202);
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+ border-radius: 0.7em;
+ padding: 2em;
 }
 
 .banner h2 {
@@ -236,6 +239,15 @@ nav a.router-link-exact-active {
   justify-content: center;
   align-items: flex-start;
   gap: 1em;
+}
+
+.message-icon {
+
+  height: 2.4rem;
+  width: 3rem;
+  background: rgb(78,180,193);
+  background: linear-gradient(90deg, rgba(78,180,193,1) 0%, rgba(255,6,228,1) 100%);
+  border-radius: 0.5em;
 }
 
 .message .message-content {
