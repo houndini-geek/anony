@@ -9,7 +9,7 @@
   <div class="banner">
     <h5 v-if="!usernameRef">Fetching username...</h5>
     <h2 v-else> Hello, {{ usernameRef }}</h2>
-    <button @click="shareLink"> {{ userURL  || 'Loading shareable link...'}}</button>
+    <button @click="shareLink"> {{ userURL  || 'Creating link...'}}</button>
   </div>
 
   <nav>
