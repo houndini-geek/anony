@@ -121,7 +121,7 @@ border-radius: 0.5em;
 .container {
 
     margin: 10% auto 0;
-    width: min(100%,40rem);
+    width: min(98%,40rem);
     background: rgb(108,174,182);
     background: radial-gradient(circle, rgba(108,174,182,1) 0%, rgba(123,166,204,1) 0%, rgba(215,90,238,1) 100%, rgba(231,6,255,1) 100%);
     text-align: center;
@@ -129,6 +129,18 @@ border-radius: 0.5em;
     border-radius: 1em;
 }
 
+@media (max-width: 800px) {
+  .container {
+    margin:15% auto 0 ;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .container {
+    margin: 20% auto 0
+  }
+}
 .container-header {
 
     width: 100%;
