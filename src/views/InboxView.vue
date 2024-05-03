@@ -229,7 +229,7 @@ nav a.router-link-exact-active {
   margin: 15% auto 0;
   text-align: center;
   display: grid;
-  grid-gap: 0.7em;
+  grid-gap: 1.7em;
   justify-content: center;
   grid-template-columns: repeat(auto-fit,minmax(20rem,15rem));
 }
@@ -239,12 +239,13 @@ nav a.router-link-exact-active {
   justify-content: center;
   align-items: flex-start;
   gap: 1em;
+  max-height:10rem;
 }
 
 .message-icon {
 
-  height: 2.4rem;
-  width: 3rem;
+  height: 2.5em;
+  width: 3em;
   background: rgb(78,180,193);
   background: linear-gradient(90deg, rgba(78,180,193,1) 0%, rgba(255,6,228,1) 100%);
   border-radius: 0.5em;
