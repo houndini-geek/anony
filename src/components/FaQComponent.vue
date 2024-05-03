@@ -36,10 +36,10 @@ export default {}
 <style scoped>
 section {
   width: 100%;
-  margin:10% auto 3%;
+  margin: 10% auto 3%;
   text-align: center;
-  background: rgb(133,183,189);
-  background: linear-gradient(90deg, rgba(133,183,189,1) 0%, rgba(244,130,231,1) 100%);
+  background: rgb(133, 183, 189);
+  background: linear-gradient(90deg, rgba(133, 183, 189, 1) 0%, rgba(244, 130, 231, 1) 100%);
   border-radius: 0.7em;
   padding: 2em;
 }

@@ -1,6 +1,6 @@
 <template>
-  <HeaderComponentVue  :user="isUser"/>
-  <BannerComponentVue :user="isUser"/>
+  <HeaderComponentVue :user="isUser" />
+  <BannerComponentVue :user="isUser" />
   <anonySectionComponentVue />
   <FaQComponentVue />
 </template>
@@ -14,17 +14,14 @@ import HeaderComponentVue from '../components/HeaderComponent.vue'
 import { checkUser } from '../composables/userParams.js'
 import { ref } from 'vue'
 
-
 export default {
   components: { HeaderComponentVue, BannerComponentVue, AnonySectionComponentVue, FaQComponentVue },
 
-  setup(){
-
+  setup() {
     const isUser = ref(false)
     const handleUserState = async () => {
       const user = await checkUser()
       isUser.value = user.value
-      
     }
     handleUserState()
     return {
