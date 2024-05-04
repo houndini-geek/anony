@@ -56,7 +56,7 @@ section h3 {
 section p {
   font-weight: 500;
   font-size: 1.4vw;
-  padding: 0 14em;
+  padding: 0 14em 0.7em;
   margin: 1.5em 0;
   text-align: center;
 }

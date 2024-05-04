@@ -34,8 +34,9 @@ export default {}
 </script>
 
 <style scoped>
+
 section {
-  width: 100%;
+  width: min(98%,40rem);
   margin: 10% auto 3%;
   text-align: center;
   background: rgb(133, 183, 189);
@@ -59,15 +60,15 @@ section div {
 }
 
 section div h4 {
-  font-weight: 800;
-  font-size: 1.7em;
+  font-weight: 700;
+  font-size: 1.4em;
   text-transform: capitalize;
   padding: 0.6em 0;
 }
 
 section div p {
-  font-weight: 500;
-  font-size: 1.2em;
+  font-weight: 400;
+  font-size: 1.1em;
   text-align-last: left;
   word-wrap: wrap;
 }
