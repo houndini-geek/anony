@@ -21,7 +21,7 @@ export default {
 <style scoped>
 .banner {
   width: min(98%, 240rem);
-  height: 65vh;
+  /* height: 65vh; */
   height: auto;
   margin: 10% auto 0;
   display: flex;
@@ -39,7 +39,7 @@ export default {
   text-align: center;
   line-height: 1.7;
   font-weight: 900;
-  font-size: 5vw;
+  font-size: 3.5vw;
   padding: 0 4em;
 }
 

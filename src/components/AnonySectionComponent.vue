@@ -48,14 +48,14 @@ main section {
 }
 
 section h3 {
-  font-size: 3.5vw;
+  font-size: 2vw;
   font-weight: 800;
   padding: 0.2em 0;
 }
 
 section p {
-  font-weight: 700;
-  font-size: 1.7vw;
+  font-weight: 500;
+  font-size: 1.4vw;
   padding: 0 14em;
   margin: 1.5em 0;
   text-align: center;
