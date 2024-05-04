@@ -25,6 +25,7 @@
     <RouterLink :to="{ name: 'Inbox' }" class="active">Messages</RouterLink>
     <RouterLink to="/room">Room</RouterLink>
   </nav>
+  <OpenMssgComponent v-if="openCard" :mssg="mssgRef" @closeCard="toggleCard" />
 
   <div class="messages">
     <div v-if="!messagesRef.length">
@@ -35,7 +36,18 @@
       <div class="message-icon"></div>
       <div class="message-content">
         <h5>{{ message.date }}</h5>
-        <div class="message-data">
+        <button @click="deleteRequest(message.id)" title="Delete this message" class="deleteBtn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            fill="#000000"
+            viewBox="0 0 256 256"
+          >
+            <path d="M220,128a4,4,0,0,1-4,4H40a4,4,0,0,1,0-8H216A4,4,0,0,1,220,128Z"></path>
+          </svg>
+        </button>
+        <div class="message-data" @click="openMssg(message.message)">
           <p>
             {{ message.message }}
           </p>
@@ -47,10 +59,14 @@
 
 <script>
 import { onMounted, ref } from 'vue'
-import { getUserData } from '../composables/userParams.min.js'
+import { getUserData, deleteMssg } from '../composables/userParams.min.js'
+import OpenMssgComponent from '../components/OpenMssgComponent.vue'
 
 export default {
+  components: { OpenMssgComponent },
   setup() {
+    const openCard = ref(false)
+    const mssgRef = ref('')
     const usernameRef = ref('')
     const messagesRef = ref([])
     const userURL = ref('')
@@ -95,6 +111,21 @@ export default {
         })
     }
 
+    const deleteRequest = async (mssgId) => {
+      const mssg = await deleteMssg(mssgId)
+      if (mssg.success) {
+        await handleUserData()
+      }
+    }
+    const openMssg = (mssg) => {
+      mssgRef.value = mssg
+      toggleCard()
+    }
+
+    const toggleCard = () => {
+      openCard.value = !openCard.value
+    }
+
     onMounted(async () => {
       await handleUserData()
     })
@@ -102,7 +133,12 @@ export default {
       usernameRef,
       messagesRef,
       userURL,
-      shareLink
+      openCard,
+      mssgRef,
+      shareLink,
+      openMssg,
+      toggleCard,
+      deleteRequest
     }
   }
 }
@@ -234,6 +270,7 @@ nav a.router-link-exact-active {
 .message .message-content {
   width: 100%;
   text-align: left;
+  position: relative;
 }
 
 .message-content h5 {
@@ -241,9 +278,21 @@ nav a.router-link-exact-active {
   font-size: 0.7em;
 }
 
+.message-content .deleteBtn {
+  background-color: transparent;
+  position: absolute;
+  right: 35%;
+  top: -20%;
+}
+
+.message-content .deleteBtn svg {
+  width: 1.5em;
+  fill: var(--vt-c-black);
+}
 .message-data {
   width: 100%;
   padding: 0.4em 0;
+  cursor: zoom-in;
 }
 
 .message-data p {

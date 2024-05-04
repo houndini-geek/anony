@@ -34,9 +34,8 @@ export default {}
 </script>
 
 <style scoped>
-
 section {
-  width: min(98%,40rem);
+  width: min(98%, 40rem);
   margin: 10% auto 3%;
   text-align: center;
   background: rgb(133, 183, 189);
