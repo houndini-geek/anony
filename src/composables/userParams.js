@@ -124,48 +124,52 @@ async function getUserData() {
 }
 
 async function deleteMssg(mssgId) {
-  const uid = auth.currentUser.uid;
+  const uid = auth.currentUser.uid
   if (!uid) {
-    return alert('An error occurred. Please try refreshing the page.');
+    return alert('An error occurred. Please try refreshing the page.')
   }
 
   return new Promise((resolve, reject) => {
-    const colRef = collection(db, 'users');
-    const docRef = doc(colRef, uid);
+    const colRef = collection(db, 'users')
+    const docRef = doc(colRef, uid)
 
-    getDoc(docRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.data();
-        const messages = data.messages;
-        
-        if (!messages) {
-          reject({ error: "No messages found." });
-          return alert('No messages found.');
-        }
-        
-        const newMessages = messages.filter((mssg) => mssg.id !== mssgId);
-        
-        if (newMessages.length < messages.length) {
-          updateDoc(docRef, { messages: newMessages }).then(() => {
-            resolve({ success: "Message deleted successfully." });
-            alert('Message deleted successfully!');
-          }).catch((error) => {
-            reject({ error: "An error occurred while deleting the message." + error });
-            alert('An error occurred while deleting the message.');
-          });
+    getDoc(docRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.data()
+          const messages = data.messages
+
+          if (!messages) {
+            reject({ error: 'No messages found.' })
+            return alert('No messages found.')
+          }
+
+          const newMessages = messages.filter((mssg) => mssg.id !== mssgId)
+
+          if (newMessages.length < messages.length) {
+            updateDoc(docRef, { messages: newMessages })
+              .then(() => {
+                resolve({ success: 'Message deleted successfully.' })
+                alert('Message deleted successfully!')
+              })
+              .catch((error) => {
+                reject({ error: 'An error occurred while deleting the message.' + error })
+                alert('An error occurred while deleting the message.')
+              })
+          } else {
+            reject({ error: 'Message not found.' })
+            alert('Message not found.')
+          }
         } else {
-          reject({ error: "Message not found." });
-          alert('Message not found.');
+          reject({ error: 'User document not found.' })
+          alert('An error occurred. Please try refreshing the page.')
         }
-      } else {
-        reject({ error: 'User document not found.' });
-        alert('An error occurred. Please try refreshing the page.');
-      }
-    }).catch((error) => {
-      reject({ error: "An error occurred while fetching user data." + error});
-      alert('An error occurred while fetching user data.');
-    });
-  });
+      })
+      .catch((error) => {
+        reject({ error: 'An error occurred while fetching user data.' + error })
+        alert('An error occurred while fetching user data.')
+      })
+  })
 }
 
 async function getReceiverName(uid) {
@@ -241,11 +245,10 @@ async function checkUser() {
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user)
         isUser.value = true
         resolve(isUser)
       } else {
-        console.log('No user found')
+        console.log('User not authenticated');
       }
     })
   })
