@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "concurrently \"npm run dev\" \"npm run devStart\"",
+    "startDev": "concurrently \"npm run dev\" \"npm run devStart\"",
+    "start": "concurrently \"npm run build\" \"npm run server\"",
     "dev": "vite",
     "server": "node server.js",
     "build": "vite build",
