@@ -4,12 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "startDev": "concurrently \"npm run dev\" \"npm run devStart\"",
-    "start": "concurrently \"npm run build\" \"npm run server\"",
     "dev": "vite",
     "server": "node server.js",
-    "build": "vite build",
     "devStart": "nodemon server.js",
+    "build": "vite build",
     "preview": "vite preview",
     "minify": "terser src/composables/userParams.js -c -m --output src/composables/userParams.min.js",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",

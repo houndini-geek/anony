@@ -2,7 +2,7 @@
   <main>
     <header>
       <div class="room_details">
-        <h1>Houndini's room</h1>
+        <h1>{{ hostRef || 'Anony'}}'s room</h1>
         <button class="shareBtn" v-if="isRoomOpen" @click="shareRoomLink">share room link</button>
         <div class="connected_client">
           <svg
@@ -17,7 +17,7 @@
           <span>0</span>
         </div>
       </div>
-      <button title="Open new room" @click="openRoom" v-if="isUser">
+      <button :title="isRoomOpen ? 'Close room' : 'Open new room' " @click="openRoom">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="25"
@@ -86,33 +86,29 @@
 
 <script>
 import { io } from 'socket.io-client'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
-import { checkUser } from '../composables/userParams.min.js'
+import { createRoom } from '../composables/userParams.js'
 import mediaUploaderComponent from '../components/MediaUploaderComponent.vue'
 export default {
   components: { mediaUploaderComponent },
   setup() {
-   const socket = io('http://localhost:3000/');
+   const socket = io('https://anony-server.onrender.com');
     const roomUrl = ref('')
     const mssg = ref('')
     const messages = ref([])
     const currentUser = ref('')
     const uploadRequest = ref(false)
     const fileUrl = ref('')
-    const isRoomOpen = ref(false)
+    const isRoomOpen = ref(false);
+    const hostRef = ref('');
     const urlParams = new URLSearchParams(window.location.search)
     const roomId = urlParams.get('room_id');
-    const isUser = ref(false)
+    const host = urlParams.get('host');
+    hostRef.value = host
+   
 
-const handleUserState = async () => {
-  const user = await checkUser()
-  isUser.value = user.value
-}
 
-onMounted(() => {
-  handleUserState();
-})
     socket.on('connect', () => {
       console.log('connected')
     })
@@ -122,10 +118,37 @@ onMounted(() => {
       currentUser.value = socket
     })
 
-    const openRoom = () => {
-      socket.emit('openRoom')
+    const openRoom = async () => {
+
+      try{
+
+        const data =  await createRoom();
+      if(isRoomOpen.value) {
+    // Send close room event 
+    isRoomOpen.value = false
+   // console.log(roomId, data.hostId);
+    const room = {
+      roomId ,
+      hostId: data.hostId
+    }
+     socket.emit('closeRoom', (room));
+    return
+  } else {
+    socket.emit('openRoom', (data));
+    isRoomOpen.value = true
+    //console.log(data)
+  }
+  
+      }catch{
+        console.log('error')
+      }
+      
     }
 
+    socket.on('actionDenied',mssg => {
+      alert(mssg);
+      isRoomOpen.value = true
+    })
     const shareRoomLink = () => {
       // copie room link to clipboard
       navigator.clipboard
@@ -138,10 +161,12 @@ onMounted(() => {
           alert(err)
         });
     }
-    socket.on('roomOpenned', (roomID) => {
-      const link = `${location.origin}/room/?room_id=${roomID}`
+    socket.on('roomOpenned', (roomData) => {
+      const link = `${location.origin}/room/?host=${roomData.host.toLowerCase()}&room_id=${roomData.roomId}`
       roomUrl.value = link
       console.log(roomUrl.value)
+      window.location.href = link
+     //console.log(roomData)
       isRoomOpen.value = true
     })
 
@@ -244,8 +269,7 @@ onMounted(() => {
       uploadRequest,
       fileUrl,
       isRoomOpen,
-      isUser,
-      handleUserState,
+      hostRef,
       shareRoomLink,
       createUploadMedia,
       sendMedia,
@@ -278,6 +302,7 @@ header {
 
 .room_details h1 {
   font-weight: 800;
+  text-transform: capitalize;
 }
 
 .room_details .shareBtn {
@@ -321,8 +346,7 @@ header > button svg {
   align-items: left;
   justify-content: flex-start;
   gap: 1em;
-  padding: 1.3em;
-  /* padding-bottom: 15rem;  */
+  padding: 7em 0.7em 5em 0.7em;
 }
 
 ::-webkit-scrollbar {

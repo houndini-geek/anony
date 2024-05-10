@@ -254,4 +254,27 @@ async function checkUser() {
   })
 }
 
-export { signIn, createUser, getUserData, getReceiverName, sendAnonyMssg, checkUser, deleteMssg }
+async function createRoom() {
+  const uid = auth.currentUser.uid
+  if(!uid) return
+
+
+  return new Promise((resolve, reject) => {
+    const colRef = collection(db, 'users');
+    const docRef = doc(colRef, uid);
+    getDoc(docRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.data();
+        const { uid, username } = data 
+        resolve({ hostId: uid, host: username })
+      }else {
+        reject('Cannot get user doc!');
+      }
+    })
+  })
+
+}
+
+
+
+export { signIn, createUser, getUserData, getReceiverName, sendAnonyMssg, checkUser, deleteMssg, createRoom }

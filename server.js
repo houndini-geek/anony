@@ -27,6 +27,9 @@ const io = new Server(server, {
 
 
 const openRooms = new Map();
+const roomDetails = {
+    hostId : ''
+}
 
 // Generate a unique room ID (e.g., UUID)
 function generateRoomId() {
@@ -38,13 +41,32 @@ function generateRoomId() {
 
 // Socket.IO event handlers can now be added below
 io.on('connection', (socket) => {
-    console.log(socket.id);
+   // console.log(socket.id);
     socket.emit('socketId', (socket.id))
-    socket.on('openRoom', () => {
+    socket.on('openRoom', (data) => {
         const roomId = generateRoomId();
+        const roomData = {
+            roomId,
+            host: data.host,
+            hostId: data.hostId
+        }
+        roomDetails.hostId = data.hostId 
+        console.log(roomDetails)
         openRooms.set(roomId, new Set());
-        socket.emit('roomOpenned', roomId);
+        socket.emit('roomOpenned', (roomData));
     });
+
+    socket.on('closeRoom', (room) => {
+        //Check if the close request is sent by the Host 
+        if (room.hostId === roomDetails.hostId) {
+            openRooms.delete(room.roomId);
+            console.log(`Room ${room.roomId} closed`);
+        }else {
+            console.log(`User ${socket.id} tried to close room ${room.roomId} but is not the host`);
+            //Emit an action denied to the user 
+            socket.emit('actionDenied', 'Action denied!')
+        }
+    })
 
      // Handler for when a user joins a room
      socket.on('joinRoom', (roomId) => {
@@ -59,10 +81,15 @@ io.on('connection', (socket) => {
     });
 
     socket.on('Sendmessage', (data) => {
-       // Broadcast the message to all other clients in the same room
-       io.to(data.roomId).emit('receiveMessage', data);
-      // socket.emit('mssgSent', (data));
-       console.log(`Message received in room ${data.roomId}: ${data}`);
+        if(openRooms.has(data.roomId)){
+  // Broadcast the message to all other clients in the same room
+  io.to(data.roomId).emit('receiveMessage', data);
+ // socket.emit('mssgSent', (data));
+  console.log(`Message received in room ${data.roomId}: ${data}`);
+        }else {
+        socket.emit('roomNotFound',`Room "${data.roomId}" does not exist or is 
+            closed`)
+        }
     });
 
 
