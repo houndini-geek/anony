@@ -1,8 +1,17 @@
 import express from 'express';
 import { Server } from 'socket.io';
+import cors from 'cors';
+
+//import serve-static
+
 
 const port = process.env.PORT || 3000;
 const app = express();
+
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 const server = app.listen(port, () => {
     console.log('App running on Port:' + port);
 });
