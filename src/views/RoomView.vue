@@ -93,7 +93,7 @@ import mediaUploaderComponent from '../components/MediaUploaderComponent.vue'
 export default {
   components: { mediaUploaderComponent },
   setup() {
-   const socket = io('http://localhost:3000/');
+   const socket = io('https://anony-server.onrender.com');
     const roomUrl = ref('')
     const mssg = ref('')
     const messages = ref([])
