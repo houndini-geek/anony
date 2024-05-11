@@ -212,10 +212,9 @@ export default {
         const fileReader = new FileReader()
 
         fileReader.onload = () => {
-          const blob = new Blob([fileReader.result], { type: file.type })
           uploadRequest.value = true
           // Set the file URL to display the uploaded image
-          fileUrl.value = URL.createObjectURL(blob)
+          fileUrl.value = fileReader.result
         }
 
         // Read the file as data URL
