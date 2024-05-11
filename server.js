@@ -35,8 +35,8 @@ function generateRoomId() {
 // Socket.IO event handlers can now be added below
 io.on('connection', (socket) => {
   socket.on('disconnect', () => {
-    // Emit custom event to notify clients about disconnection
-    io.emit('connectionLost');
+    // Emit custom event to notify clients bout disconnection
+    socket.emit('connectionLost');
   });
   socket.emit('socketId', socket.id);
 
