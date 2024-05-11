@@ -218,7 +218,7 @@ export default {
         }
 
         // Read the file as data URL
-        fileReader.readAsArrayBuffer(file)
+        fileReader.readAsDataURL(file)
       }
     }
 
