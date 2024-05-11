@@ -249,9 +249,12 @@ export default {
       alert(error)
       isRoomOpen.value = false
     })
-    socket.on('disconnect', () => {
-      console.log('disconnected')
-    })
+    // Client-side code
+socket.on('connectionLost', () => {
+  // Display a message to prompt the user to refresh the browser
+  alert('Connection lost! Please refresh the page.');
+});
+
 
     return {
       openRoom,
