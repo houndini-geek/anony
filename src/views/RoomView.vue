@@ -1,38 +1,23 @@
 <template>
   <main>
-    <header>
+    <header v-if="isRoomOpen">
       <div class="room_details">
-        <h1>{{ hostRef || 'Anony'}}'s room</h1>
-        <button class="shareBtn" v-if="isRoomOpen" @click="shareRoomLink">share room link</button>
-        <div class="connected_client">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            fill="#000000"
-            viewBox="0 0 256 256"
-          >
-            <path d="M156,128a28,28,0,1,1-28-28A28,28,0,0,1,156,128Z"></path>
-          </svg>
-          <span>0</span>
-        </div>
+        <h1>{{ hostRef || 'Anony' }}'s room</h1>
+        <button class="shareBtn" v-if="isRoomOpen" @click="shareRoomLink">share room link</button> |
+        <span>{{ usersRef || 0 }}</span>
       </div>
-      <button :title="isRoomOpen ? 'Close room' : 'Open new room' " @click="openRoom">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="25"
-          height="25"
-          fill="#000000"
-          viewBox="0 0 256 256"
-        >
-          <path
-            d="M124,128V48a4,4,0,0,1,8,0v80a4,4,0,0,1-8,0Zm54.18-75.35a4,4,0,1,0-4.36,6.7C198.08,75.17,212,100.2,212,128a84,84,0,0,1-168,0c0-27.8,13.92-52.83,38.18-68.65a4,4,0,0,0-4.36-6.7C51.24,70,36,97.44,36,128a92,92,0,0,0,184,0C220,97.44,204.76,70,178.18,52.65Z"
-          ></path>
-        </svg>
-      </button>
     </header>
+    <div class="noRoomOpenedContainer" v-if="!isRoomOpen">
+      <h2>No rooms open, click to create a new room</h2>
+      <button @click="openRoom">{{ createRoomSnapRef || 'create new room' }}</button>
+    </div>
 
-    <mediaUploaderComponent @sendCaptionValue="sendMedia" v-if="uploadRequest" :fileUrl="fileUrl" />
+    <mediaUploaderComponent
+      @sendCaptionValue="sendMedia"
+      v-if="uploadRequest"
+      :fileUrl="fileUrl"
+      @closeMedia="closeMedia"
+    />
 
     <div class="chats_container">
       <div
@@ -93,82 +78,87 @@ import mediaUploaderComponent from '../components/MediaUploaderComponent.vue'
 export default {
   components: { mediaUploaderComponent },
   setup() {
-   const socket = io('https://anony-server.onrender.com');
+    const socket = io('http://localhost:3000')
     const roomUrl = ref('')
     const mssg = ref('')
     const messages = ref([])
     const currentUser = ref('')
     const uploadRequest = ref(false)
     const fileUrl = ref('')
-    const isRoomOpen = ref(false);
-    const hostRef = ref('');
+    const isRoomOpen = ref(false)
+    const hostRef = ref('')
+    const usersRef = ref('')
+    const createRoomSnapRef = ref('')
     const urlParams = new URLSearchParams(window.location.search)
-    const roomId = urlParams.get('room_id');
-    const host = urlParams.get('host');
+    const roomId = urlParams.get('room_id')
+    const host = urlParams.get('host')
     hostRef.value = host
-   
-
 
     socket.on('connect', () => {
       console.log('connected')
     })
 
     socket.on('socketId', (socket) => {
-      console.log(socket)
       currentUser.value = socket
     })
 
     const openRoom = async () => {
-
-      try{
-
-        const data =  await createRoom();
-      if(isRoomOpen.value) {
-    // Send close room event 
-    isRoomOpen.value = false
-   // console.log(roomId, data.hostId);
-    const room = {
-      roomId ,
-      hostId: data.hostId
-    }
-     socket.emit('closeRoom', (room));
-    return
-  } else {
-    socket.emit('openRoom', (data));
-    isRoomOpen.value = true
-    //console.log(data)
-  }
-  
-      }catch{
+      try {
+        const data = await createRoom()
+        createRoomSnapRef.value = 'creating room...'
+        if (isRoomOpen.value) {
+          // Send close room event
+          isRoomOpen.value = false
+          // console.log(roomId, data.hostId);
+          const room = {
+            roomId,
+            hostId: data.hostId
+          }
+          socket.emit('closeRoom', room)
+          return
+        } else {
+          socket.emit('openRoom', data)
+          isRoomOpen.value = true
+          //console.log(data)
+        }
+      } catch {
         console.log('error')
       }
-      
     }
 
-    socket.on('actionDenied',mssg => {
-      alert(mssg);
+    socket.on('actionDenied', (mssg) => {
+      alert(mssg)
       isRoomOpen.value = true
     })
     const shareRoomLink = () => {
       // copie room link to clipboard
       navigator.clipboard
-       .writeText(roomUrl.value)
-       .then(() => {
+        .writeText(location.href)
+        .then(() => {
           alert('Room link copied to clipboard')
         })
-       .catch((err) => {
-          console.log(err);
+        .catch((err) => {
+          console.log(err)
           alert(err)
-        });
+        })
     }
     socket.on('roomOpenned', (roomData) => {
       const link = `${location.origin}/room/?host=${roomData.host.toLowerCase()}&room_id=${roomData.roomId}`
       roomUrl.value = link
-      console.log(roomUrl.value)
+     // console.log(roomUrl.value)
       window.location.href = link
-     //console.log(roomData)
+      //console.log(roomData)
       isRoomOpen.value = true
+      createRoomSnapRef.value = 'room created'
     })
+
+    socket.on('roomJoined', (numConnectedUsers) => {
+      usersRef.value = `${numConnectedUsers} user(s) connected`
+    });
+
+    socket.on('roomHost', hostName => {
+      hostRef.value = hostName
+    });
 
     const submitMssg = () => {
       if (!mssg.value.trim()) {
@@ -240,6 +230,11 @@ export default {
       uploadRequest.value = false
     }
 
+    const closeMedia = () => {
+      uploadRequest.value = false
+      fileUrl.value = ''
+    }
+
     if (roomId) {
       isRoomOpen.value = true
       joinRoom(roomId) // Join the room if the room ID is provided
@@ -269,6 +264,9 @@ export default {
       fileUrl,
       isRoomOpen,
       hostRef,
+      usersRef,
+      createRoomSnapRef,
+      closeMedia,
       shareRoomLink,
       createUploadMedia,
       sendMedia,
@@ -282,7 +280,8 @@ export default {
 main {
   margin: 0 auto 0;
   width: min(100%, 60rem);
-  min-height: 100vh;
+  /* min-height: 100vh; */
+  position: relative;
 }
 header {
   position: fixed;
@@ -319,33 +318,47 @@ header {
 .connected_client svg {
   fill: rgb(2, 163, 226);
 }
-header > button {
-  background-color: var(--vt-c-black);
-  border-radius: 0.5em;
-  width: 2em;
-  height: 2em;
-  display: flex;
-  justify-content: center;
+
+.noRoomOpenedContainer {
+  width: min(80%, 20rem);
   position: absolute;
-  right: 10%;
-  top: 10%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3em;
+  width: fit-content;
+}
+.noRoomOpenedContainer h2 {
+  color: var(--text-color);
+  text-align: center;
 }
 
-header > button svg {
-  fill: var(--vt-c-white);
+.noRoomOpenedContainer button {
+  text-transform: capitalize;
+  background-color: rgba(78, 180, 193, 1);
+  padding: 0.8em 1.7em;
+  border-radius: 0.4em;
+  font-weight: 500;
+  font-size: 1.2em;
+  color: var(--text-color);
 }
 
 .chats_container {
   width: min(100%, 60rem);
-  max-height: 450px;
+  max-height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
   margin: 10% auto 0;
   display: flex;
   flex-direction: column;
   align-items: left;
   justify-content: flex-start;
   gap: 1em;
-  padding: 7em 0.7em 5em 0.7em;
+  padding: 7em 0.7em 7em 0.7em;
 }
 
 ::-webkit-scrollbar {
@@ -435,6 +448,7 @@ form {
   justify-content: center;
   align-items: center;
   gap: 0.3em;
+  background-color: var(--color-background);
 }
 
 form input {
@@ -442,17 +456,18 @@ form input {
   height: 4.6em;
   border-radius: 0.4em;
   flex-grow: 1;
+  font-size: 1em;
+  font-weight: 600;
 }
 
 form button {
   outline: none;
-  height: 2.7em;
-  width: 2.7em;
+  height: 3.7em;
   display: flex;
   place-items: center;
-  /* padding: 0 1em; */
   border-radius: 0.4em;
-  background-color: var(--vt-c-black);
+  background: rgb(78, 180, 193);
+  background: linear-gradient(90deg, rgba(78, 180, 193, 1) 0%, rgba(255, 6, 228, 1) 100%);
 }
 
 form button svg {

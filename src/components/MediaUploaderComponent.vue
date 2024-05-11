@@ -6,7 +6,7 @@
       </div>
       <input type="text" v-model="captionValue" id="" placeholder="Add media description." />
       <div class="actions">
-        <button type="button">cancel</button>
+        <button type="button" @click="$emit('closeMedia')">cancel</button>
         <button type="submit">upload</button>
       </div>
     </form>
@@ -49,6 +49,7 @@ form {
   align-items: center;
   justify-content: center;
   width: fit-content;
+  gap: 0.7em;
 }
 
 .media {

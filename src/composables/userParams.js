@@ -249,6 +249,7 @@ async function checkUser() {
         resolve(isUser)
       } else {
         console.log('User not authenticated');
+        alert('User not authenticated.')
       }
     })
   })
@@ -256,25 +257,30 @@ async function checkUser() {
 
 async function createRoom() {
   const uid = auth.currentUser.uid
-  if(!uid) return
-
+  if (!uid) return
 
   return new Promise((resolve, reject) => {
-    const colRef = collection(db, 'users');
-    const docRef = doc(colRef, uid);
+    const colRef = collection(db, 'users')
+    const docRef = doc(colRef, uid)
     getDoc(docRef).then((snapshot) => {
       if (snapshot.exists()) {
-        const data = snapshot.data();
-        const { uid, username } = data 
+        const data = snapshot.data()
+        const { uid, username } = data
         resolve({ hostId: uid, host: username })
-      }else {
-        reject('Cannot get user doc!');
+      } else {
+        reject('Cannot get user doc!')
       }
     })
   })
-
 }
 
-
-
-export { signIn, createUser, getUserData, getReceiverName, sendAnonyMssg, checkUser, deleteMssg, createRoom }
+export {
+  signIn,
+  createUser,
+  getUserData,
+  getReceiverName,
+  sendAnonyMssg,
+  checkUser,
+  deleteMssg,
+  createRoom
+}

@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
- import HomeView from '../views/HomeView.vue'
- import SessionView from '../views/SessionView.vue'
- import InboxView from '../views/InboxView.vue'
- import RoomView from '../views/RoomView.vue'
+import HomeView from '../views/HomeView.vue'
+import SessionView from '../views/SessionView.vue'
+import InboxView from '../views/InboxView.vue'
+import RoomView from '../views/RoomView.vue'
 import SendMessageView from '../views/SendMessageView.vue'
 
 // const InboxView = () => import('../views/InboxView.vue')
