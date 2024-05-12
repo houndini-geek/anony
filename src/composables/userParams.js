@@ -248,7 +248,7 @@ async function checkUser() {
         isUser.value = true
         resolve(isUser)
       } else {
-        console.log('User not authenticated');
+        console.log('User not authenticated')
         alert('User not authenticated.')
       }
     })

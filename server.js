@@ -34,107 +34,95 @@ function generateRoomId() {
 io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     // Emit custom event to notify clients bout disconnection
-    socket.emit('connectionLost');
-  });
-  socket.emit('socketId', socket.id);
+    socket.emit('connectionLost')
+  })
+  socket.emit('socketId', socket.id)
 
   socket.on('openRoom', (data) => {
-    const roomId = generateRoomId();
+    const roomId = generateRoomId()
     const roomData = {
       roomId,
       host: data.host,
       hostId: data.hostId
-    };
-    roomHosts.push(data.hostId);
+    }
+    roomHosts.push(data.hostId)
 
     // Add room details to openRooms map
     openRooms.set(roomId, {
       host: data.host,
       hostId: data.hostId,
       users: new Set()
-    });
-  
-    socket.emit('roomOpenned', roomData);
-  });
-  
+    })
+
+    socket.emit('roomOpenned', roomData)
+  })
 
   socket.on('closeRoom', (room) => {
     //Check if the close request is sent by the Host
 
-    const { roomId, hostId } = room 
+    const { roomId, hostId } = room
     if (roomHosts.includes(hostId)) {
       // Remove the room from the openRooms map
-      openRooms.delete(roomId);
+      openRooms.delete(roomId)
       // Remove the host from the roomHosts array
-      roomHosts.splice(roomHosts.indexOf(hostId), 1);
-      
-    }else {
-        //Emit an action denied to the user
-       socket.emit('actionDenied', 'Action denied!');
+      roomHosts.splice(roomHosts.indexOf(hostId), 1)
+    } else {
+      //Emit an action denied to the user
+      socket.emit('actionDenied', 'Action denied!')
     }
-    
-
-    
-    
   })
 
+  // Handler for when a user joins a room
+  socket.on('joinRoom', (roomId) => {
+    if (openRooms.has(roomId)) {
+      const room = openRooms.get(roomId)
+      if (room && room.users instanceof Set) {
+        socket.join(roomId)
+        room.users.add(socket.id) // Add the user to the room's set
 
+        // Emit 'roomJoined' event with host's name and number of connected users
+        const hostName = room.host // Assuming the host's name is stored in the 'host' property
+        // const numConnectedUsers = room.users.size;
+        socket.emit('roomHost', hostName)
 
-
-// Handler for when a user joins a room
-socket.on('joinRoom', (roomId) => {
-  if (openRooms.has(roomId)) {
-    const room = openRooms.get(roomId);
-    if (room && room.users instanceof Set) {
-      socket.join(roomId);
-      room.users.add(socket.id); // Add the user to the room's set
-      
-      // Emit 'roomJoined' event with host's name and number of connected users
-      const hostName = room.host; // Assuming the host's name is stored in the 'host' property
-     // const numConnectedUsers = room.users.size;
-      socket.emit('roomHost', hostName);
-      
-      updateConnectedUsers(roomId); // Update the number of connected users
+        updateConnectedUsers(roomId) // Update the number of connected users
+      } else {
+        console.log(`Invalid room data structure for room ${roomId}`)
+        // Handle invalid room data structure (e.g., not a set)
+      }
     } else {
-      console.log(`Invalid room data structure for room ${roomId}`);
-      // Handle invalid room data structure (e.g., not a set)
+      socket.emit('roomNotFound', `Room "${roomId}" does not exist or is closed`)
+      console.log(`Room ${roomId} does not exist or is closed`)
     }
-  } else {
-    socket.emit('roomNotFound', `Room "${roomId}" does not exist or is closed`);
-    console.log(`Room ${roomId} does not exist or is closed`);
-  }
-});
-
-
+  })
 
   // Handler for when a user disconnects from the socket
-socket.on('disconnect', () => {
-  // Iterate over all rooms
-  for (const [roomId, room] of openRooms.entries()) {
-    // Get the users set for the room
-    const users = room.users;
-    // Check if the disconnected user is in any room
-    if (users.has(socket.id)) {
-      users.delete(socket.id); // Remove the user from the room's set
-      updateConnectedUsers(roomId); // Update the number of connected users
-      break; // Exit the loop after handling the disconnection
+  socket.on('disconnect', () => {
+    // Iterate over all rooms
+    for (const [roomId, room] of openRooms.entries()) {
+      // Get the users set for the room
+      const users = room.users
+      // Check if the disconnected user is in any room
+      if (users.has(socket.id)) {
+        users.delete(socket.id) // Remove the user from the room's set
+        updateConnectedUsers(roomId) // Update the number of connected users
+        break // Exit the loop after handling the disconnection
+      }
+    }
+  })
+
+  // Function to update the number of connected users in a room and emit the updated count to clients
+  function updateConnectedUsers(roomId) {
+    if (openRooms.has(roomId)) {
+      const room = openRooms.get(roomId)
+      const numConnectedUsers = room.users.size
+      console.log(`User ${socket.id} joined room ${roomId} with ${numConnectedUsers} users`)
+      io.to(roomId).emit('roomJoined', numConnectedUsers)
+    } else {
+      console.log(`Room ${roomId} does not exist`)
+      // Handle the case where the room does not exist
     }
   }
-});
-
-// Function to update the number of connected users in a room and emit the updated count to clients
-function updateConnectedUsers(roomId) {
-  if (openRooms.has(roomId)) {
-    const room = openRooms.get(roomId);
-    const numConnectedUsers = room.users.size;
-    console.log(`User ${socket.id} joined room ${roomId} with ${numConnectedUsers} users`);
-    io.to(roomId).emit('roomJoined', numConnectedUsers);
-  } else {
-    console.log(`Room ${roomId} does not exist`);
-    // Handle the case where the room does not exist
-  }
-}
-
 
   socket.on('Sendmessage', (data) => {
     if (openRooms.has(data.roomId)) {

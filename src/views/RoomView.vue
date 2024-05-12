@@ -4,7 +4,17 @@
       <div class="room_details">
         <h1>{{ hostRef || 'Anony' }}'s room</h1>
         <button class="closeRoom" title="Close room" @click="openRoom">
-          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104,104,0,0,0,128,24Zm-8,40a8,8,0,0,1,16,0v64a8,8,0,0,1-16,0Zm8,144A80,80,0,0,1,83.55,61.48a8,8,0,1,1,8.9,13.29,64,64,0,1,0,71.1,0,8,8,0,1,1,8.9-13.29A80,80,0,0,1,128,208Z"></path></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="30"
+            fill="#000000"
+            viewBox="0 0 256 256"
+          >
+            <path
+              d="M128,24A104,104,0,1,0,232,128,104,104,0,0,0,128,24Zm-8,40a8,8,0,0,1,16,0v64a8,8,0,0,1-16,0Zm8,144A80,80,0,0,1,83.55,61.48a8,8,0,1,1,8.9,13.29,64,64,0,1,0,71.1,0,8,8,0,1,1,8.9-13.29A80,80,0,0,1,128,208Z"
+            ></path>
+          </svg>
         </button>
         <button class="shareBtn" v-if="isRoomOpen" @click="shareRoomLink">share room link</button> |
         <span>{{ usersRef || 0 }}</span>
@@ -81,7 +91,7 @@ import mediaUploaderComponent from '../components/MediaUploaderComponent.vue'
 export default {
   components: { mediaUploaderComponent },
   setup() {
-    const socket = io('http://localhost:3000');
+    const socket = io('http://localhost:3000')
     const roomUrl = ref('')
     const mssg = ref('')
     const messages = ref([])
@@ -148,7 +158,7 @@ export default {
     socket.on('roomOpenned', (roomData) => {
       const link = `${location.origin}/room/?host=${roomData.host.toLowerCase()}&room_id=${roomData.roomId}`
       roomUrl.value = link
-     // console.log(roomUrl.value)
+      // console.log(roomUrl.value)
       window.location.href = link
       //console.log(roomData)
       isRoomOpen.value = true
@@ -157,11 +167,11 @@ export default {
 
     socket.on('roomJoined', (numConnectedUsers) => {
       usersRef.value = `${numConnectedUsers} user(s) connected`
-    });
+    })
 
-    socket.on('roomHost', hostName => {
+    socket.on('roomHost', (hostName) => {
       hostRef.value = hostName
-    });
+    })
 
     const submitMssg = () => {
       if (!mssg.value.trim()) {
@@ -253,11 +263,10 @@ export default {
       isRoomOpen.value = false
     })
     // Client-side code
-socket.on('connectionLost', () => {
-  // Display a message to prompt the user to refresh the browser
-  alert('Connection lost! Please refresh the page.');
-});
-
+    socket.on('connectionLost', () => {
+      // Display a message to prompt the user to refresh the browser
+      alert('Connection lost! Please refresh the page.')
+    })
 
     return {
       openRoom,
@@ -317,13 +326,11 @@ header {
 }
 
 .closeRoom {
-
   position: absolute;
-  top:0;
+  top: 0;
   right: 25%;
   background-color: transparent;
   border: none;
-
 }
 .connected_client {
   display: flex;
