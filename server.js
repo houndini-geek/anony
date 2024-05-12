@@ -22,9 +22,7 @@ const io = new Server(server, {
 })
 
 const openRooms = new Map()
-const roomDetails = {
-  hostId: ''
-}
+const roomHosts = []
 
 // Generate a unique room ID (e.g., UUID)
 function generateRoomId() {
@@ -47,7 +45,8 @@ io.on('connection', (socket) => {
       host: data.host,
       hostId: data.hostId
     };
-    
+    roomHosts.push(data.hostId);
+
     // Add room details to openRooms map
     openRooms.set(roomId, {
       host: data.host,
@@ -61,14 +60,22 @@ io.on('connection', (socket) => {
 
   socket.on('closeRoom', (room) => {
     //Check if the close request is sent by the Host
-    if (room.hostId === roomDetails.hostId) {
-      openRooms.delete(room.roomId)
-      console.log(`Room ${room.roomId} closed`)
-    } else {
-      console.log(`User ${socket.id} tried to close room ${room.roomId} but is not the host`)
-      //Emit an action denied to the user
-      socket.emit('actionDenied', 'Action denied!')
+
+    const { roomId, hostId } = room 
+    if (roomHosts.includes(hostId)) {
+      // Remove the room from the openRooms map
+      openRooms.delete(roomId);
+      // Remove the host from the roomHosts array
+      roomHosts.splice(roomHosts.indexOf(hostId), 1);
+      
+    }else {
+        //Emit an action denied to the user
+       socket.emit('actionDenied', 'Action denied!');
     }
+    
+
+    
+    
   })
 
 
