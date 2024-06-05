@@ -20,7 +20,8 @@ export default {
 
 <style scoped>
 .banner {
-  width: min(98%, 240rem);
+  width: min(90%, 240rem);
+  padding: 1.4em;
   /* height: 65vh; */
   height: auto;
   margin: 10% auto 0;
@@ -31,7 +32,7 @@ export default {
   /* background-color: #cdcdcd; */
   background: rgb(238, 174, 202);
   background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
-  border-radius: 0.7em;
+  border-radius: 0.3em;
 }
 
 .banner h2 {
@@ -61,7 +62,7 @@ export default {
   }
 
   .banner {
-    margin: 25% auto 0;
+    margin: 15% auto 0;
   }
 }
 

@@ -45,19 +45,23 @@ main {
 main section {
   width: 100%;
   margin: 8em 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
 }
 
 section h3 {
-  font-size: 2vw;
+  font-size: 2em;
   font-weight: 800;
-  padding: 0.2em 0;
+  
 }
 
 section p {
   font-weight: 500;
-  font-size: 1.4vw;
-  padding: 0 14em 0.7em;
-  margin: 1.5em 0;
+  font-size: 1.1em;
+  width: min(98%,35rem);
   text-align: center;
 }
 
@@ -83,17 +87,5 @@ section a {
   border-radius: 0.5em;
 }
 
-@media (max-width: 600px) {
-  section h3 {
-    padding: 0;
-    font-size: 7vw;
-  }
-}
 
-@media (max-width: 600px) {
-  section p {
-    padding: 0;
-    font-size: 3.5vw;
-  }
-}
 </style>

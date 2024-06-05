@@ -352,9 +352,9 @@ header {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3em;
-  width: fit-content;
+  gap: 1em;
 }
+
 .noRoomOpenedContainer h2 {
   color: var(--text-color);
   text-align: center;

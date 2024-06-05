@@ -1,7 +1,6 @@
 <template>
   <header>
     <h1>anony</h1>
-    <RouterLink to="/session">Sign in</RouterLink>
   </header>
 
   <div class="container">
@@ -17,7 +16,8 @@
         maxlength="250"
       ></textarea>
       <button type="submit">
-        <svg
+        send
+        <!-- <svg
           xmlns="http://www.w3.org/2000/svg"
           width="32"
           height="32"
@@ -27,9 +27,14 @@
           <path
             d="M224.47,31.52a11.87,11.87,0,0,0-11.82-3L20.74,86.67a12,12,0,0,0-1.91,22.38L105,151l41.92,86.15A11.88,11.88,0,0,0,157.74,244c.34,0,.69,0,1,0a11.89,11.89,0,0,0,10.52-8.63l58.21-192,0-.08A11.85,11.85,0,0,0,224.47,31.52Zm-4.62,9.54-58.23,192a4,4,0,0,1-7.48.59l-41.3-84.86,50-50a4,4,0,1,0-5.66-5.66l-50,50-84.9-41.31a3.88,3.88,0,0,1-2.27-4,3.93,3.93,0,0,1,3-3.54L214.9,36.16A3.93,3.93,0,0,1,216,36a4,4,0,0,1,2.79,1.19A3.93,3.93,0,0,1,219.85,41.06Z"
           ></path>
-        </svg>
+        </svg> -->
       </button>
     </form>
+
+    <div class="requestToCreate">
+      <h5>Your turn to Create your Anony link</h5>
+      <RouterLink :to="{name: 'session'}">Create Anony link</RouterLink>
+    </div>
   </div>
 </template>
 
@@ -43,7 +48,7 @@ export default {
   setup() {
     const route = useRoute()
     const userId = route.params.id
-    const usernameRef = ref('')
+    const usernameRef = ref('Fetching username...')
     const messageRef = ref('')
     const feedback = ref('')
 
@@ -56,6 +61,9 @@ export default {
     const submitMssg = async () => {
       if (!messageRef.value) {
         feedback.value = 'Message cannot be empty'
+        setTimeout(() => {
+          feedback.value = ''
+        },2000);
         return
       }
       if (messageRef.value.length > 250) {
@@ -182,20 +190,51 @@ header a {
   background-color: transparent;
   border-radius: 0.6em;
   border: none;
-  text-align: center;
+  text-align: left;
   color: var(--vt-c-black);
+  font-weight: 600;
+}
+
+.container form textarea::placeholder {
+
+  text-align: center;
 }
 
 form button {
   width: min(100%, 30rem);
-  padding: 0.4em 0;
+  padding: 0.7em 0;
   background-color: var(--vt-c-black);
   margin: 1em 0;
   outline: none;
   border-radius: 0.4em;
+  color: #F1F1F1;
+  font-weight: 700;
+  font-size: 1.3em;
+  text-transform: capitalize;
 }
 
+.requestToCreate {
+  width: 100%;
+  text-align: center;
+}
+
+.requestToCreate h5 {
+
+  font-weight: 700;
+  font-size: 1.2em;
+}
+
+.requestToCreate a {
+
+  text-decoration: none;
+  outline: none;
+  display: block;
+  font-weight: 700;
+  margin-top: 0.7em;
+  color: var(--vt-c-white);
+}
+/* 
 form button svg {
   fill: var(--vt-c-white);
-}
+} */
 </style>
