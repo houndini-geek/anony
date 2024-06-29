@@ -5,7 +5,7 @@
 
   <div class="container">
     <div class="container-header">
-      <h2 v-if="usernameRef">Send an anonymous message to {{ usernameRef || '......' }}</h2>
+      <h2 v-if="usernameRef">Send an anonymous message to {{ usernameRef }}</h2>
       <h4 v-else>User not found.</h4>
       <span class="feedback"> {{ feedback }}</span>
     </div>
@@ -14,20 +14,14 @@
         placeholder="Type your anonymous message"
         v-model="messageRef"
         maxlength="250"
+        required
+        rows="4"
+        cols="50"
+        @input="InputMssges"
+        autofocus
       ></textarea>
-      <button type="submit">
+      <button type="submit" :disabled="!canSendMssg">
         send
-        <!-- <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
-          fill="#000000"
-          viewBox="0 0 256 256"
-        >
-          <path
-            d="M224.47,31.52a11.87,11.87,0,0,0-11.82-3L20.74,86.67a12,12,0,0,0-1.91,22.38L105,151l41.92,86.15A11.88,11.88,0,0,0,157.74,244c.34,0,.69,0,1,0a11.89,11.89,0,0,0,10.52-8.63l58.21-192,0-.08A11.85,11.85,0,0,0,224.47,31.52Zm-4.62,9.54-58.23,192a4,4,0,0,1-7.48.59l-41.3-84.86,50-50a4,4,0,1,0-5.66-5.66l-50,50-84.9-41.31a3.88,3.88,0,0,1-2.27-4,3.93,3.93,0,0,1,3-3.54L214.9,36.16A3.93,3.93,0,0,1,216,36a4,4,0,0,1,2.79,1.19A3.93,3.93,0,0,1,219.85,41.06Z"
-          ></path>
-        </svg> -->
       </button>
     </form>
 
@@ -48,10 +42,22 @@ export default {
   setup() {
     const route = useRoute()
     const userId = route.params.id
-    const usernameRef = ref('Fetching username...')
-    const messageRef = ref('')
-    const feedback = ref('')
+    const usernameRef = ref('');
+    const messageRef = ref('');
+    const feedback = ref('');
+    const canSendMssg = ref(false);
 
+    const InputMssges = () => {
+      if (messageRef.value.length > 0) {
+        canSendMssg.value = true
+      } else {
+        canSendMssg.value = false
+      }
+      if (messageRef.value.length > 250) {
+        canSendMssg.value = false
+      }
+      
+    }
     const handleAnonyMssg = async () => {
       const username = await getReceiverName(userId)
       usernameRef.value = username.value
@@ -92,6 +98,8 @@ export default {
       usernameRef,
       messageRef,
       feedback,
+      canSendMssg,
+      InputMssges,
       submitMssg
     }
   }
@@ -184,15 +192,15 @@ header a {
   outline: none;
   width: min(100%, 30rem);
   min-height: 15rem;
-  padding: 0.7em;
-  font-weight: 500;
+  padding: 1.7em;
+  font-weight: 800;
   resize: none;
   background-color: transparent;
   border-radius: 0.6em;
   border: none;
   text-align: left;
   color: var(--vt-c-black);
-  font-weight: 600;
+  font-family: var(--font-family);
 }
 
 .container form textarea::placeholder {
@@ -211,6 +219,11 @@ form button {
   font-weight: 700;
   font-size: 1.3em;
   text-transform: capitalize;
+}
+
+form button:disabled {
+  background-color: rgb(211, 208, 208);
+  color: #2222;
 }
 
 .requestToCreate {

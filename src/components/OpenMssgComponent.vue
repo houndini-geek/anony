@@ -64,5 +64,8 @@ export default {
   padding: 0.9em;
   text-align: center;
   font-weight: 500;
+  width: 100%;
+  /* word-wrap: break-word; */
+  overflow-wrap: break-word;
 }
 </style>

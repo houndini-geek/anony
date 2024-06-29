@@ -181,7 +181,7 @@ async function getReceiverName(uid) {
 
   return new Promise((resolve, reject) => {
     const colRef = collection(db, 'users')
-    const docRef = doc(colRef, receiverId)
+    const docRef = doc(colRef, receiverId);
 
     getDoc(docRef).then((snapshot) => {
       if (snapshot.exists()) {
@@ -191,7 +191,7 @@ async function getReceiverName(uid) {
       } else {
         reject('Cannot find the user doc')
       }
-    })
+    });
   })
 }
 
@@ -226,7 +226,7 @@ async function sendAnonyMssg(uid, mssg) {
         })
           .then(() => {
             resolve({ success: 'Your Anonymous message has been sent succesfuly' })
-            console.log('sent')
+            //console.log('sent')
           })
           .catch((error) => {
             reject(error.message)
